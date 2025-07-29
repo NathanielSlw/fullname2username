@@ -1,4 +1,4 @@
-Simple Python script to generate Active Directory username permutations from full names.
+Simple Python script to generate username permutations from full names.
 
 The goal of this script is to automate the creation of common username variants, useful for pentesting, user enumeration, or auditing.
 
