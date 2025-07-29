@@ -113,8 +113,29 @@ def print_available_formats():
     print()
 
 def main():
+    examples_text = """
+Examples:
+
+  Generate usernames from a single full name:
+    python fullname2username.py -u "Elon Musk"
+
+  Generate usernames from a file containing multiple full names:
+    python fullname2username.py -u users.txt
+
+  Save individual files for all formats:
+    python fullname2username.py -u users.txt --save-individual
+
+  Save individual files for a specific format only:
+    python fullname2username.py -u users.txt --save-individual fn.ln
+
+  List all available formats:
+    python fullname2username.py -l
+"""
+
     parser = argparse.ArgumentParser(
-        description="Generate username permutations from full names."
+        description="Generate username permutations from full names.",
+        epilog=examples_text,
+        formatter_class=argparse.RawDescriptionHelpFormatter
     )
     parser.add_argument("-u", "--users", required=True, help='Full name or file with full names')
     parser.add_argument(
