@@ -6,14 +6,14 @@ Inspired by `linkedin2username`.
 
 ## Use Case
 
-**fullname2username** takes either a single full name or a file containing multiple full names (one per line) and generates a list of username permutations based on common patterns like `first.last`, `f.last`, `firstlast`, etc.
+**fullname2usernamess** takes either a single full name or a file containing multiple full names (one per line) and generates a list of username permutations based on common patterns like `first.last`, `f.last`, `firstlast`, etc.
 
 The output is a combined file with all generated usernames (`all_usernames.txt`), and optionally individual files per format (if requested).
 
 ## Options
 
 ```
-usage: fullname2username.py [-h] -u USERS [--save-individual [FORMAT]] [-l]
+usage: fullname2usernamess.py [-h] -u USERS [--save-individual [FORMAT]] [-l]
 
 Generate username permutations from full names.
 
@@ -33,23 +33,23 @@ options:
 
 - Generate usernames from a single full name:
 ```sh
-python fullname2username.py -u "Elon Musk"
+python fullname2usernames.py -u "Elon Musk"
 ```
 - Generate usernames from a file containing multiple full names:
 ```sh
-python fullname2username.py -u users.txt
+python fullname2usernames.py -u users.txt
 ```
 - Save individual files for all formats:
 ```sh
-python fullname2username.py -u users.txt --save-individual
+python fullname2usernames.py -u users.txt --save-individual
 ```
 - Save individual files for a specific format only:
 ```sh
-python fullname2username.py -u users.txt --save-individual fn.ln
+python fullname2usernames.py -u users.txt --save-individual fn.ln
 ```
 - List all available formats:
 ```sh
-python fullname2username.py -l
+python fullname2usernames.py -l
 ```
 
 ## Output
@@ -59,24 +59,24 @@ python fullname2username.py -l
 
 ## Install
 
-To use `fullname2username.py` globally:
+To use `fullname2usernames.py` globally:
 
 1. Copy the script to `/opt` and make it executable:
 ```sh
-sudo cp fullname2username.py /opt/
-sudo chmod +x /opt/fullname2username.py
+sudo cp fullname2usernames.py /opt/
+sudo chmod +x /opt/fullname2usernames.py
 ```
-2. Create a wrapper script in `/usr/local/bin/fullname2username`:
+2. Create a wrapper script in `/usr/local/bin/fullname2usernames`:
 ```sh
 #!/bin/bash
-/opt/fullname2username.py "$@"
+/opt/fullname2usernames.py "$@"
 ```
 3. Make the wrapper executable:
 ```sh
-sudo chmod +x /usr/local/bin/fullname2username
+sudo chmod +x /usr/local/bin/fullname2usernames
 ```
 
-You can now run the script anywhere by calling `fullname2username`.
+You can now run the script anywhere by calling `fullname2usernames`.
 
 ## Features
 - Accepts single full name or file with multiple full names
