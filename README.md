@@ -6,14 +6,14 @@ Inspired by `linkedin2username`.
 
 ## Use Case
 
-**fullname2usernamess** takes either a single full name or a file containing multiple full names (one per line) and generates a list of username permutations based on common patterns like `first.last`, `f.last`, `firstlast`, etc.
+**fullname2usernames** takes either a single full name or a file containing multiple full names (one per line) and generates a list of username permutations based on common patterns like `first.last`, `f.last`, `firstlast`, etc.
 
 The output is a combined file with all generated usernames (`all_usernames.txt`), and optionally individual files per format (if requested).
 
 ## Options
 
 ```
-usage: fullname2usernamess.py [-h] -u USERS [--save-individual [FORMAT]] [-l]
+usage: fullname2usernames.py [-h] -u USERS [--save-individual [FORMAT]] [-l]
 
 Generate username permutations from full names.
 
@@ -80,7 +80,7 @@ You can now run the script anywhere by calling `fullname2usernames`.
 
 ## Features
 - Accepts single full name or file with multiple full names
-- Generates a wide variety of common Active Directory username formats
+- Generates a wide variety of common username formats
 - Optionally saves individual files per username format
 - Validates requested formats before generation
 - Lists all available formats with descriptions
