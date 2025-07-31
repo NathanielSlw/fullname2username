@@ -147,11 +147,14 @@ Examples:
     python fullname2usernames.py -u users.txt
 
   Save individual files for all formats:
-    python fullname2usernames.py -u users.txt --save-individual
+    python fullname2usernames.py -u users.txt --save-formats
 
-  Save individual files for a specific format only:
-    python fullname2usernames.py -u users.txt --save-individual fn.ln
+  Save individual files for specific formats only:
+    python fullname2usernames.py -u users.txt --save-formats fn.ln,fnln,fi.ln
 
+  Add a domain to usernames:
+    python fullname2usernames.py -u users.txt -d example.com
+    
   List all available formats:
     python fullname2usernames.py -l
 """
@@ -163,23 +166,29 @@ Examples:
     )
     parser.add_argument("-u", "--users", required=True, help='Full name or file with full names')
     parser.add_argument(
-        "--save-individual",
+        "--save-formats",
         nargs="?",
         const="__all__",
         metavar="FORMAT",
         help=(
-            "Save individual username files. "
-            "Optionally provide a single format to save (e.g. --save-individual fn.ln). "
+            "Save each username format in its own file. "
+            "Optionally provide one or more formats separated by commas (ex: --save-formats fn.ln,fnln). "
             "Use -l/--list-formats to view available formats.\n"
             "Legend: fn = firstname, fi = first initial, ln = lastname, li = last initial"
         )
+        
     )
     parser.add_argument(
         "-l", "--list-formats",
         action="store_true",
         help="List all available username formats with descriptions."
     )
-
+    parser.add_argument(
+        "-d", "--domain",
+        metavar="DOMAIN",
+        help="Adds a domain name to the end of each username (ex: -d example.com => elon.musk@example.com)"
+    )
+    
     args = parser.parse_args()
 
     if args.list_formats:
@@ -187,17 +196,20 @@ Examples:
         return
 
     # Determine formats to generate
-    if args.save_individual and args.save_individual != "__all__":
-        if args.save_individual not in ALL_FORMATS:
-            print(f"[!] Invalid format: {args.save_individual}")
+    if args.save_formats and args.save_formats != "__all__":
+        # Split by comma and remove spaces
+        requested_formats = [fmt.strip() for fmt in args.save_formats.split(",")]
+        invalid = [fmt for fmt in requested_formats if fmt not in ALL_FORMATS]
+        if invalid:
+            print(f"[!] Invalid format(s): {', '.join(invalid)}")
             print_available_formats()
             return
-        formats_to_generate = [args.save_individual]
+        formats_to_generate = requested_formats
     else:
         formats_to_generate = list(ALL_FORMATS.keys())
 
-    individual_usernames_dir = "individual-usernames"
-    if args.save_individual:
+    individual_usernames_dir = "f2u-individual-usernames"
+    if args.save_formats:
         os.makedirs(individual_usernames_dir, exist_ok=True)
 
     output_files = {f"{fmt}.txt": [] for fmt in formats_to_generate}
@@ -215,11 +227,13 @@ Examples:
         if line.strip():
             variants = generate_usernames(line, formats_to_generate)
             for filename, value in variants.items():
+                if args.domain:
+                    value = f"{value}@{args.domain}"
                 output_files[filename].append(value)
                 all_usernames.append(value)
 
     # Save individual files (if requested)
-    if args.save_individual:
+    if args.save_formats:
         for filename, lines in output_files.items():
             with open(os.path.join(individual_usernames_dir, filename), "w") as f:
                 f.write("\n".join(lines) + "\n")
@@ -230,16 +244,18 @@ Examples:
 
     print(f"[+] Generated {len(all_usernames)} usernames.")
     print(f"[+] Saved to 'all_usernames.txt'")
-    if args.save_individual:
+    if args.save_formats:
         print(f"[+] Individual file(s) saved in './{individual_usernames_dir}/'")
         print(f"[+] Formats used: {', '.join(formats_to_generate)}")
-
+    if args.domain:
+        print(f"[+] Added domain : @{args.domain}")
+        
 logo_ascii = r"""
 ▐▘  ▜ ▜          ▄▖                   
 ▜▘▌▌▐ ▐ ▛▌▀▌▛▛▌█▌▄▌▌▌▛▘█▌▛▘▛▌▀▌▛▛▌█▌▛▘
 ▐ ▙▌▐▖▐▖▌▌█▌▌▌▌▙▖▙▖▙▌▄▌▙▖▌ ▌▌█▌▌▌▌▙▖▄▌
-                                      
-fullname2usernames v1.1 - by NathanielSlw                                                                                                                                                           
+
+fullname2usernames v1.2 - by NathanielSlw
 """
 
 if __name__ == "__main__":

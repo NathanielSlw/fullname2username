@@ -1,6 +1,6 @@
 Simple Python script to generate username permutations from full names.
 
-The goal of this script is to automate the creation of common username variants, useful for pentesting, user enumeration, or auditing.
+The goal of this script is to automate the creation of common username variants, useful for pentesting, user enumeration, OSINT, or auditing.
 
 Inspired by `linkedin2username`.
 
@@ -10,10 +10,27 @@ Inspired by `linkedin2username`.
 
 The output is a combined file with all generated usernames (`all_usernames.txt`), and optionally individual files per format (if requested).
 
-## Options
+### Real-World Use Cases
+
+Some practical scenarios where `f`ullname2usernames proves useful:
+
+- Active Directory user enumeration during internal pentests:
+```sh
+kerbrute userenum -d <DOMAIN> --dc <DC_IP> all_usernames.txt
+```
+
+- OSINT (Open Source Intelligence) investigations to collect potential email addresses or usernames for reconnaissance:
+```sh
+python fullname2usernames.py -u fullnames.txt -d example.com
+# Output: elon.musk@example.com, emusk@example.com, etc.
+```
+
+- Audit/account discovery for validating user naming conventions across an organization.
+
+## Usage
 
 ```
-usage: fullname2usernames.py [-h] -u USERS [--save-individual [FORMAT]] [-l]
+usage: fullname2usernames.py [-h] -u USERS [--save-formats [FORMAT]] [-l]
 
 Generate username permutations from full names.
 
@@ -21,15 +38,17 @@ options:
   -h, --help            show this help message and exit
   -u USERS, --users USERS
                         Full name or file with full names
-  --save-individual [FORMAT]
-                        Save individual username files.
-                        Optionally provide a single format to save (e.g. --save-individual fn.ln).
+  --save-formats [FORMAT]
+                        Save each username format in its own file.
+                        Optionally provide one or more formats separated by commas (e.g. --save-formats fn.ln,fnln).
                         Use -l/--list-formats to view available formats.
                         Legend: fn = firstname, fi = first initial, ln = lastname, li = last initial
   -l, --list-formats    List all available username formats with descriptions.
+  -d DOMAIN, --domain DOMAIN
+                        Adds a domain name to the end of each username (ex: -d example.com => elon.musk@example.com)
 ```
 
-## Examples
+### Examples
 
 - Generate usernames from a single full name:
 ```sh
@@ -41,11 +60,15 @@ python fullname2usernames.py -u users.txt
 ```
 - Save individual files for all formats:
 ```sh
-python fullname2usernames.py -u users.txt --save-individual
+python fullname2usernames.py -u users.txt --save-formats
 ```
-- Save individual files for a specific format only:
+- Save individual files for specific formats only:
 ```sh
-python fullname2usernames.py -u users.txt --save-individual fn.ln
+python fullname2usernames.py -u users.txt --save-formats fn.ln,fnln
+```
+- Add a domain to all usernames:
+```sh
+python fullname2usernames.py -u users.txt -d example.com
 ```
 - List all available formats:
 ```sh
@@ -55,7 +78,7 @@ python fullname2usernames.py -l
 ## Output
 
 - All generated usernames combined in `all_usernames.txt`
-- If `--save-individual` is used, individual files for each format are saved in the folder `./individual-usernames/`
+- If `--save-formats` is used, individual files for each format are saved in the folder `./f2u-individual-usernames/`
 
 ## Install
 
@@ -84,4 +107,5 @@ You can now run the script anywhere by calling `fullname2usernames`.
 - Optionally saves individual files per username format
 - Validates requested formats before generation
 - Lists all available formats with descriptions
+- Can append a domain to each username
 - Simple, fast, and requires only Python 3
