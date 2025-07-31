@@ -12,14 +12,14 @@ The output is a combined file with all generated usernames (`all_usernames.txt`)
 
 ### Real-World Use Cases
 
-Some practical scenarios where `f`ullname2usernames proves useful:
+Some practical scenarios where `fullname2usernames` proves useful:
 
 - Active Directory user enumeration during internal pentests:
 ```sh
 kerbrute userenum -d <DOMAIN> --dc <DC_IP> all_usernames.txt
 ```
 
-- OSINT (Open Source Intelligence) investigations to collect potential email addresses or usernames for reconnaissance:
+- OSINT investigations to collect potential email addresses or usernames:
 ```sh
 python fullname2usernames.py -u fullnames.txt -d example.com
 # Output: elon.musk@example.com, emusk@example.com, etc.
@@ -30,7 +30,7 @@ python fullname2usernames.py -u fullnames.txt -d example.com
 ## Usage
 
 ```
-usage: fullname2usernames.py [-h] -u USERS [--save-formats [FORMAT]] [-l]
+usage: fullname2usernames.py [-h] -u USERS [--save-formats [FORMAT]] [-l] [-d DOMAIN]
 
 Generate username permutations from full names.
 
@@ -80,26 +80,60 @@ python fullname2usernames.py -l
 - All generated usernames combined in `all_usernames.txt`
 - If `--save-formats` is used, individual files for each format are saved in the folder `./f2u-individual-usernames/`
 
-## Install
+## Available Username Formats
 
-To use `fullname2usernames.py` globally:
+Here are all supported username formats. You can use `-l` or `--list-formats` to display this list from the command line.
 
-1. Copy the script to `/opt` and make it executable:
-```sh
-sudo cp fullname2usernames.py /opt/
-sudo chmod +x /opt/fullname2usernames.py
-```
-2. Create a wrapper script in `/usr/local/bin/fullname2usernames`:
-```sh
-#!/bin/bash
-/opt/fullname2usernames.py "$@"
-```
-3. Make the wrapper executable:
-```sh
-sudo chmod +x /usr/local/bin/fullname2usernames
-```
+Legend:
+- `fn` = firstname
+- `fi` = first initial
+- `ln` = lastname
+- `li` = last initial
 
-You can now run the script anywhere by calling `fullname2usernames`.
+All formats:
+```sh
+# No separator
+fnln
+filn
+fnli
+fili
+lnfn
+lnfi
+lifn
+lifi
+fn
+ln
+
+# Dot
+fn.ln
+fi.ln
+fn.li
+fi.li
+ln.fn
+ln.fi
+li.fn
+li.fi
+
+# Dash
+fn-ln
+fi-ln
+fn-li
+fi-li
+ln-fn
+ln-fi
+li-fn
+li-fi
+
+# Underscore
+fn_ln
+fi_ln
+fn_li
+fi_li
+ln_fn
+ln_fi
+li_fn
+li_fi
+```
 
 ## Features
 - Accepts single full name or file with multiple full names
